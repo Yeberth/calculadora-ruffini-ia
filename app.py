@@ -384,7 +384,15 @@ if __name__ == '__main__':
         os.makedirs(templates_dir)
     
     print("🧮 Iniciando Calculadora de Ruffini con IA...")
-    print("🌐 Servidor disponible en: http://localhost:5000")
-    print("📚 Presiona Ctrl+C para detener el servidor")
     
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Configuración para producción
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('FLASK_ENV') != 'production'
+    
+    if debug:
+        print("🌐 Servidor disponible en: http://localhost:5000")
+        print("📚 Presiona Ctrl+C para detener el servidor")
+    else:
+        print("🌐 Servidor en modo producción")
+    
+    app.run(host='0.0.0.0', port=port, debug=debug)
