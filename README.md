@@ -297,7 +297,7 @@ Idiomas soportados:
 
 ## 🎉 Reconocimientos
 
-- **Desarrollador Principal**: Tu Nombre
+- **Desarrollador Principal**: Yeberth
 - **Contribuidores**: [Lista de contribuidores](CONTRIBUTORS.md)
 - **Inspiración**: Comunidad educativa matemática
 
