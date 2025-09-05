@@ -1,0 +1,11 @@
+Flask==2.3.3
+Werkzeug==2.3.7
+click>=7.0
+itsdangerous>=2.0
+Jinja2>=3.0
+MarkupSafe>=2.0
+
+# Dependencias opcionales para desarrollo
+# pytest>=7.0  # Para testing
+# python-dotenv>=0.19  # Para variables de entorno
+# gunicorn>=20.0  # Para producción

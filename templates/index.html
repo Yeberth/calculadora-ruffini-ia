@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧮 Calculadora de Ruffini con IA</title>
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-calculator"></i> Calculadora de Ruffini con IA</h1>
+            <p class="subtitle">División polinómica con explicaciones inteligentes paso a paso</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Formulario de entrada -->
+            <section class="input-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-edit"></i> Ingresa tu problema</h2>
+                    </div>
+                    <div class="card-body">
+                        <form id="ruffiniForm">
+                            <div class="input-group">
+                                <label for="polynomial">
+                                    <i class="fas fa-function"></i> Polinomio
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="polynomial" 
+                                    name="polynomial" 
+                                    placeholder="Ejemplo: x^3 + 2x^2 - 5x + 6"
+                                    required
+                                >
+                                <small class="help-text">
+                                    Usa ^ para exponentes (ej: x^3). Soporta términos como: x^4, 2x^3, -5x, +6
+                                </small>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label for="root">
+                                    <i class="fas fa-square-root-alt"></i> Raíz (valor de 'a' en x-a)
+                                </label>
+                                <input 
+                                    type="number" 
+                                    id="root" 
+                                    name="root" 
+                                    step="0.1"
+                                    placeholder="Ejemplo: 2"
+                                    required
+                                >
+                                <small class="help-text">
+                                    Número por el cual dividir el polinomio
+                                </small>
+                            </div>
+                            
+                            <div class="button-group">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-play"></i> Calcular
+                                </button>
+                                <button type="button" id="clearBtn" class="btn btn-secondary">
+                                    <i class="fas fa-broom"></i> Limpiar
+                                </button>
+                                <button type="button" id="exampleBtn" class="btn btn-info">
+                                    <i class="fas fa-lightbulb"></i> Ejemplo
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Loading -->
+            <section id="loading" class="loading-section" style="display: none;">
+                <div class="loading-spinner">
+                    <i class="fas fa-cog fa-spin"></i>
+                    <p>Calculando con IA...</p>
+                </div>
+            </section>
+
+            <!-- Resultados -->
+            <section id="results" class="results-section" style="display: none;">
+                <!-- Resultado rápido -->
+                <div class="card result-card">
+                    <div class="card-header result-header">
+                        <h2><i class="fas fa-check-circle"></i> Resultado</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="quick-result">
+                            <div class="result-item">
+                                <span class="label">Cociente:</span>
+                                <span id="quotient" class="result-value"></span>
+                            </div>
+                            <div class="result-item">
+                                <span class="label">Resto:</span>
+                                <span id="remainder" class="result-value"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabla de Ruffini -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-table"></i> Tabla de Ruffini</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="ruffini-table-container">
+                            <table id="ruffiniTable" class="ruffini-table">
+                                <!-- Se llenará dinámicamente -->
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Explicación paso a paso -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-robot"></i> Explicación con IA</h2>
+                        <button id="toggleExplanation" class="btn-toggle">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div id="aiExplanation" class="card-body explanation-body">
+                        <!-- Se llenará con la explicación de IA -->
+                    </div>
+                </div>
+
+                <!-- Verificación -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-check-double"></i> Verificación</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="verification" class="verification-content">
+                            <!-- Se llenará con la verificación -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Error -->
+            <section id="error" class="error-section" style="display: none;">
+                <div class="card error-card">
+                    <div class="card-header error-header">
+                        <h2><i class="fas fa-exclamation-triangle"></i> Error</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="errorMessage" class="error-message"></div>
+                        <div id="aiHelp" class="ai-help"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Sección de ayuda -->
+        <aside class="help-section">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-question-circle"></i> Ayuda rápida</h3>
+                </div>
+                <div class="card-body">
+                    <div class="help-item">
+                        <h4>¿Qué es el método de Ruffini?</h4>
+                        <p>Es una forma simplificada de dividir polinomios por binomios de la forma (x - a).</p>
+                    </div>
+                    <div class="help-item">
+                        <h4>Formato del polinomio:</h4>
+                        <ul>
+                            <li><code>x^3 + 2x^2 - 5x + 6</code></li>
+                            <li><code>2x^4 - x^3 + 3x - 1</code></li>
+                            <li><code>x^2 - 4</code></li>
+                        </ul>
+                    </div>
+                    <div class="help-item">
+                        <h4>Ejemplos de raíces:</h4>
+                        <ul>
+                            <li>Para dividir por (x - 2), usa raíz = 2</li>
+                            <li>Para dividir por (x + 3), usa raíz = -3</li>
+                            <li>Para dividir por (x - 0.5), usa raíz = 0.5</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <footer class="footer">
+            <p>
+                <i class="fas fa-robot"></i> 
+                Calculadora de Ruffini con IA - Aprende matemáticas de forma inteligente
+            </p>
+        </footer>
+    </div>
+
+    <script src="../static/js/app.js"></script>
+</body>
+</html>
